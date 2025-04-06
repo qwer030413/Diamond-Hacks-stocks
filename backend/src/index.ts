@@ -18,7 +18,39 @@ const client = new Client({
   password: 'qwer', // Replace with your PostgreSQL password
   port: 5432, // Default PostgreSQL port
 });
-client.connect().then(() => {
+async function initializeDatabase() {
+  try {
+    // Create the `balance` table if it doesn't exist
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS balance (
+        balance NUMERIC(15, 2) NOT NULL DEFAULT 10000
+      );
+    `);
+
+    // Insert an initial balance if the table is empty
+    const balanceResult = await client.query('SELECT COUNT(*) FROM balance;');
+    if (parseInt(balanceResult.rows[0].count, 10) === 0) {
+      await client.query('INSERT INTO balance (balance) VALUES (10000);');
+      console.log('Initial balance inserted.');
+    }
+
+    // Create the `quiz` table if it doesn't exist
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS quiz (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        correct INTEGER NOT NULL,
+        balancechange NUMERIC(15, 2) NOT NULL
+      );
+    `);
+
+    console.log('Database initialized successfully!');
+  } catch (error) {
+    console.error('Error initializing database:', error);
+  }
+}
+client.connect().then(async() => {
+  await initializeDatabase();
   console.log('Connected to PostgreSQL database!');
 }).catch((err) => {
   console.error('Error connecting to PostgreSQL database:', err);
