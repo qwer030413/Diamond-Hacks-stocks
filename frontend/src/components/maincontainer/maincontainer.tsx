@@ -39,7 +39,7 @@ export default function MainContainer(props: any) {
       ...quiz,
       correct: backendQuiz.correct,
       status: backendQuiz.correct > 0 ? "completed" : "not done",
-      score: backendQuiz.correct > 0 ? `${backendQuiz.correct}/10` : "N/A",
+      score: backendQuiz.correct > 0 ? `${backendQuiz.correct}/3` : "N/A",
     };
   });
 
