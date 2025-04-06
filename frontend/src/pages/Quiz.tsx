@@ -12,9 +12,12 @@ export default function Quiz() {
     const [correctAnswer, setCorrectAnswer] = useState(""); // Store the correct answer for the current question
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [quizData, setQuizData] = useState<{ question: string; choice1: string; choice2: string; answer: string; }[]>([]); // Store quiz data from AI
+    const [quizData, setQuizData] = useState<{ question: string; choice1: string; choice2: string; answer: string; choice1Percentage: number | null; choice2Percentage: number | null;}[]>([]); // Store quiz data from AI
     const ai = new GoogleGenAI({ apiKey: "AIzaSyBaH4rns3_6ue8vfEd_lrZpy-hOK4QH-C0" });
     const [newBalance, setNewBalance] = useState(0);
+    const [originalBalance, setOriginalBalance] = useState(0); // Store the original balance for comparison
+    const [correct, setCorrect] = useState(0); // Store the correct answer count for balance calculation
+    const [difference, setDifference] = useState(0); // State to hold the investment amount
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -23,8 +26,10 @@ export default function Quiz() {
                     throw new Error("Network response was not ok");
                 }
                 const data = await response.json(); // Parse the JSON response
-                setNewBalance(data);
-                console.log("Fetched data:", data); // Log the fetched data
+                setNewBalance(data.balance);
+                setOriginalBalance(data.balance)
+                console.log("called new balance")
+                console.log("Fetched data:", data.balance); // Log the fetched data
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -42,6 +47,12 @@ export default function Quiz() {
             const currentQuiz = quizData[currentQuizIndex];
             setQuestion(currentQuiz.question); // Update the question state
             setCorrectAnswer(currentQuiz.answer); // Update the correct answer state
+            if (currentQuiz.answer === "Choice 1") {
+                setDifference(currentQuiz.choice1Percentage ?? 0); // Set the difference for Choice 1
+            }
+            else{
+                setDifference(currentQuiz.choice2Percentage ?? 0); // Set the difference for Choice 2
+            }
         }
     }, [quizData, currentQuizIndex]); 
     const submitQuiz = async (answer:any) => {
@@ -49,15 +60,62 @@ export default function Quiz() {
         setAnswers(explanation)
       };
     function goNext(){
-        if (currentQuizIndex < quizData.length - 1) {
+        if (currentQuizIndex < 2) {
             setCurrentQuizIndex(currentQuizIndex + 1);
+            console.log(newBalance);
             setCorrectAnswer("")
         } else {
             alert("You have completed all quizzes!");
+            postQuiz(newBalance); // Post the quiz results to the server
+            postBalance(newBalance); // Post the updated balance to the server
             navigate(`/`)
         }
     }
-
+    console.log(correctAnswer)
+    async function postBalance(updatedBalance: number) {
+        console.log("Posting updated balance:", updatedBalance);
+        console.log("balance type:", typeof updatedBalance);
+        try {
+          const response = await fetch("http://localhost:3000/balance", {
+            method: "POST", // Use POST to update the balance
+            headers: {
+              "Content-Type": "application/json", // Specify JSON content type
+            },
+            body: JSON.stringify({ newBalance: updatedBalance }), // Send the updated balance
+          });
+      
+          if (!response.ok) {
+            throw new Error("Failed to update balance");
+          }
+      
+          const data = await response.json();
+          console.log("Balance successfully updated:", data);
+        } catch (error) {
+          console.error("Error updating balance:", error);
+        }
+      }
+    async function postQuiz(updatedBalance: number) {
+    console.log("Posting updated balance:", updatedBalance);
+    console.log("balance type:", typeof updatedBalance);
+    try {
+        const response = await fetch("http://localhost:3000/quiz", {
+        method: "POST", // Use POST to update the balance
+        headers: {
+            "Content-Type": "application/json", // Specify JSON content type
+        },
+        body: JSON.stringify({ name: id, correct: correct, balancechange: -(originalBalance - newBalance) }), // Send the updated balance
+        });
+    
+        if (!response.ok) {
+        throw new Error("Failed to update balance");
+        }
+    
+        const data = await response.json();
+        console.log("Balance successfully updated:", data);
+    } catch (error) {
+        console.error("Error updating balance:", error);
+    }
+    }
     async function gemini_questions(stockName: string, questionAmount: number) {
         // Dynamically update the prompt with the stock name
         const response = await ai.models.generateContent({
@@ -90,18 +148,31 @@ export default function Quiz() {
         const questionsArray = Array.from(text.matchAll(pattern)).map(match => {
             const choice1 = match[2].trim();
             const choice2 = match[3].trim();
-          
+
             // Extract percentages from choice1 and choice2
-            const percentagePattern = /(-?\d+)%/;
-            const choice1Percentage = choice1.match(percentagePattern)?.[1] ?? null;
-            const choice2Percentage = choice2.match(percentagePattern)?.[1] ?? null;          
+            const percentagePattern = /(-?\d+(.\d+)?)%/; // Match integers or decimals
+            const choice1Percentage = choice1.match(percentagePattern)?.[1] ?? "";
+            const choice2Percentage = choice2.match(percentagePattern)?.[1] ?? "";
+
+            // Determine if the percentage is positive or negative based on keywords
+            const choice1SignedPercentage = choice1.toUpperCase().includes("INCREASE OF")
+                ? +(parseFloat(choice1Percentage) || 0)
+                : choice1.toUpperCase().includes("DECREASE OF")
+                ? -(parseFloat(choice1Percentage) || 0)
+                : parseFloat(choice1Percentage) || 0;
+
+            const choice2SignedPercentage = choice2.toUpperCase().includes("INCREASE OF")
+                ? +(parseFloat(choice2Percentage) || 0)
+                : choice2.toUpperCase().includes("DECREASE OF")
+                ? -(parseFloat(choice2Percentage) || 0)
+                : parseFloat(choice2Percentage) || 0;
             return {
               question: match[1].trim(),
               choice1,
               choice2,
               answer: match[4].trim(),
-              choice1Percentage: choice1Percentage ? parseInt(choice1Percentage, 10) : null,
-              choice2Percentage: choice2Percentage ? parseInt(choice2Percentage, 10) : null,
+              choice1Percentage: choice1SignedPercentage, // Include the signed percentage as a string
+              choice2Percentage: choice2SignedPercentage, // Include the signed percentage as a string
             };
           });
         setQuizData(questionsArray)
@@ -145,7 +216,18 @@ export default function Quiz() {
                     <h1>{id} Quiz</h1>
                     <text>Question {currentQuizIndex + 1}</text>
                     <p>{currentQuiz.question}</p>
-                    <QuizForm quiz={currentQuiz} onSubmit={submitQuiz} goNext={goNext} answer = {answers}/>
+                    <QuizForm 
+                    quiz={currentQuiz} 
+                    onSubmit={submitQuiz} 
+                    goNext={goNext} 
+                    answer = {answers} 
+                    setCorrect = {setCorrect} 
+                    correct = {correct} 
+                    correctAnswer = {correctAnswer}
+                    setNewBalance = {setNewBalance}
+                    newBalance = {newBalance} // diff is balance
+                    difference = {difference} // Pass the investment difference to QuizForm
+                    />
                 </>
             )}
         {/* <h1>{id} Quiz</h1>

@@ -5,8 +5,8 @@ export default function QuizForm(props: any) {
     const [answer, setAnswer] = useState(""); // State to hold the answer
     const [reasoning, setReasoning] = useState(""); // State to hold the reasoning input
     const [submitted, setSubmitted] = useState(false); // State to track if the form has been submitted
-    const [investment, setInvestment] = useState(""); // State to hold the investment amount
-    const [investchoice, setInvestChoice] = useState(""); // State to hold the investment choice (yes/no)
+    const [investment, setInvestment] = useState(0); // State to hold the investment amount
+    const [investchoice, setInvestChoice] = useState(""); // State to hold the investment choice
     const navigate = useNavigate();
     useEffect(() => {
         console.log("Submitted state changed:", submitted);
@@ -23,10 +23,32 @@ export default function QuizForm(props: any) {
                 investment,
                 investchoice,
             });
+            if (answer == props.correctAnswer) {
+                props.setCorrect(props.correct + 1)
+                if (
+                    typeof props.newBalance === "number" &&
+                    typeof props.difference === "number"
+                  ) {
+                    props.setNewBalance((prevBalance: number) => {
+                        const updatedBalance = prevBalance + investment * (props.difference / 100);
+                        console.log("Updating balance:", { prevBalance, investment, difference: props.difference, updatedBalance });
+                        return updatedBalance;
+                      });
+                  } else {
+                    const updatedBalance = props.newBalance + investment * (props.difference / 100);
+                    console.error("Invalid inputs for balance calculation:", {
+                      balance: props.newBalance,
+                      investment,
+                      difference: props.difference,
+                      updatedBalance: updatedBalance
+                    });
+                  }
+            }
+            console.log(props.correct)
             // Reset the states after submission
             setAnswer("");
             setReasoning("");
-            setInvestment("");
+            setInvestment(0);
             setInvestChoice("");
             setSubmitted(true)
         }
@@ -57,10 +79,20 @@ export default function QuizForm(props: any) {
                     <label htmlFor="no2">No</label>
                 </div>
             </div>
-            <div className="section">
-                <label htmlFor="amount">How much would you invest, Enter an amount:</label>
-                <input type="number" id="amount" name="amount" onChange={e => setInvestment(e.target.value)}/>
-            </div>
+            {investchoice === "yes" && (
+                <>
+                    <div className="section">
+                        <label htmlFor="amount">How much would you invest, Enter an amount:</label>
+                        <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            onChange={(e) => setInvestment(Number(e.target.value))}
+                            required
+                        />
+                    </div>
+                </>
+            )}
 
             <div className='section'>
                 <label htmlFor="feedback">Your reasoning:</label>

@@ -8,7 +8,7 @@ let balance = 10000;
 app.use(express.json());
 app.use(
     cors({
-      origin: 'http://localhost:5175',
+      origin: 'http://localhost:5173',
     }),
   );
 const client = new Client({
@@ -85,7 +85,7 @@ app.post('/balance', async (req: Request, res: Response) => {
 
 app.get('/balance', async (req: Request, res: Response) => {
   try {
-    const result = await client.query('SELECT balance FROM balance WHERE id = 1'); // Example query
+    const result = await client.query('SELECT * FROM balance'); // Example query
     const balance = result.rows[0]?.balance || 0; // Get the balance or default to 0
     res.status(200).json({ balance });
   } catch (error) {
