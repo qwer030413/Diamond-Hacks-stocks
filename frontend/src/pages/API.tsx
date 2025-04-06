@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: "AIzaSyBaH4rns3_6ue8vfEd_lrZpy-hOK4QH-C0" });
+const ai = new GoogleGenAI({ apiKey: "" });
 
 export default function API() {
   return (
