@@ -1,35 +1,45 @@
-.quiz-box{
+.quiz-box {
     display: flex;
     flex-direction: column;
-    background-color: rgb(232, 232, 232);
+    background-color: #878787;
     width: 350px;
     height: 250px;
     border-radius: 10px;
     cursor: pointer;
+    border: none;
+    overflow: hidden; /* Ensure child elements stay within the container */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
 }
 
-.quiz-image{
-    height: 110px;
+.quiz-box:hover {
+    background-color: #a0a0a0; /* Highlight color on hover */
+    transform: scale(1.05); /* Slightly enlarge the box on hover */
+}
+
+.quiz-image {
+    height: 130px;
     width: 100%;
-    background-color: brown;
+    border: none;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
-.title{
-    font-size: 20px;
+.title {
+    font-size: 30px;
     font-weight: bold;
-    margin: 10px;
-    color: #333;
+    margin: 10px 10px 0px 50px; /* Adjust margins for spacing */
+    color: #000;
     text-align: start;
     flex-grow: 1; /* Allows title to take up remaining space */
 }
-.info{
+
+.info {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
     width: 100%;
     color: black;
-    padding: 10px;
+    padding: 30px 20px; /* Adjust padding for spacing */
+    box-sizing: border-box; /* Ensure padding is included in the element's dimensions */
 }
