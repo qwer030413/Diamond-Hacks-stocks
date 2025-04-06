@@ -14,8 +14,8 @@ app.use(
 const client = new Client({
   user: 'postgres', // Replace with your PostgreSQL username
   host: 'localhost',
-  database: 'diamondstocks', // Replace with your PostgreSQL database name
-  password: 'qwer', // Replace with your PostgreSQL password
+  database: 'postgres', // Replace with your PostgreSQL database name
+  password: '12345', // Replace with your PostgreSQL password
   port: 5432, // Default PostgreSQL port
 });
 async function initializeDatabase() {
@@ -92,6 +92,20 @@ app.get("/quiz", async (req: any, res:any) => {
     res.status(500).json({ error: "Internal server error" }); // Return a generic error message
   }
   });
+
+  app.get('/quizzes', async (req: Request, res: Response) => {
+    try {
+      const result = await client.query(`
+        SELECT name, correct, 10 AS total
+        FROM quiz
+      `);
+      res.status(200).json(result.rows); // Return the quiz data
+    } catch (error) {
+      console.error('Error fetching quizzes:', error);
+      res.status(500).json({ error: 'Failed to fetch quizzes' });
+    }
+  });
+
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });

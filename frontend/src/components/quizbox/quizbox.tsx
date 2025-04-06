@@ -9,6 +9,7 @@ export default function QuizBox(props: { title: string; status: string; score: s
             <text className="title">{props.title}</text>
             <div className="info">
                 <text>status: {props.status}</text>
+                <div className="divider"></div>
                 <text>score: {props.score}</text>
             </div>
         </div>
