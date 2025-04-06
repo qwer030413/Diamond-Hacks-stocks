@@ -1,0 +1,11 @@
+.section{
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+.formContainer{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap:2rem;
+}

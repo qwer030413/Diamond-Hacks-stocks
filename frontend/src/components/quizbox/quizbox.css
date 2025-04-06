@@ -1,0 +1,35 @@
+.quiz-box{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(232, 232, 232);
+    width: 350px;
+    height: 250px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.quiz-image{
+    height: 110px;
+    width: 100%;
+    background-color: brown;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.title{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+    color: #333;
+    text-align: start;
+    flex-grow: 1; /* Allows title to take up remaining space */
+}
+.info{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    color: black;
+    padding: 10px;
+}
