@@ -43,3 +43,9 @@
     padding: 30px 20px; /* Adjust padding for spacing */
     box-sizing: border-box; /* Ensure padding is included in the element's dimensions */
 }
+
+.divider {
+    width: 1px;
+    height: 20px;
+    background-color: #ccc;
+}
