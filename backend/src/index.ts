@@ -79,7 +79,7 @@ app.post("/quiz", (req: any, res:any) => {
 });
 
 app.get("/quiz", async (req: any, res:any) => {
-  const getQuizzesQuery = "SELECT quiz FROM quiz;"; // SQL query to fetch all quizzes
+  const getQuizzesQuery = "SELECT id, name, correct, balancechange FROM quiz;"; // Fetch specific columns
 
   try {
     const result = await client.query(getQuizzesQuery); // Execute the query

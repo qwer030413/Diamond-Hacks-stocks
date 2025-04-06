@@ -15,11 +15,11 @@ import {
 
 interface Quiz {
   id: number;
-  score: number;
-  totalQuestions: number;
-  netMoney: number;
-  previousMoney: number;
-  currentMoney: number;
+  name: string; // Name of the quiz
+  correct: number; // Number of correct answers
+  balancechange: number; // Net money gained/lost
+  previousMoney: number; // Money from the previous quiz
+  currentMoney: number; // Dynamically calculated current money
 }
 
 // Register Chart.js components
@@ -80,17 +80,17 @@ export default function StockChart({ quizzes }: { quizzes: Quiz[] }) {
           label: (tooltipItem: any) => {
             const index = tooltipItem.dataIndex;
             const quiz = quizzes[index];
-            const percentageChange = ((quiz.netMoney / quiz.previousMoney) * 100).toFixed(2);
-            const isPositive = quiz.netMoney >= 0;
+            const percentageChange = ((quiz.balancechange / quiz.previousMoney) * 100).toFixed(2);
+            const isPositive = quiz.balancechange >= 0;
             return [
               `  Change: ${isPositive ? '+' : ''}${percentageChange}%`,
-              `  Net Money: ${isPositive ? '+$' : ''}${quiz.netMoney}`,
+              `  Net Money: ${isPositive ? '+$' : ''}${quiz.balancechange}`,
             ];
           },
           labelTextColor: (tooltipItem: any) => {
             const index = tooltipItem.dataIndex;
             const quiz = quizzes[index];
-            return quiz.netMoney >= 0 ? 'green' : 'red'; // Green for positive, red for negative
+            return quiz.balancechange >= 0 ? 'green' : 'red'; // Green for positive, red for negative
           },
         },
         bodyFont: {
