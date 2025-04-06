@@ -26,10 +26,6 @@ client.connect().then(() => {
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello from TypeScript + Express!');
 });
-app.get('/balance', (req, res) => {
-  console.log(req.body); // Log the request body to see the incoming data
-  res.status(200).json(balance);
-})
 
 app.post("/quiz", (req: any, res:any) => {
   const newQuiz = "INSERT INTO quiz(name, correct, balancechange) VALUES ($1,$2,$3);";
@@ -66,4 +62,34 @@ app.get("/quiz", async (req: any, res:any) => {
   });
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
+});
+
+// 1 to post and one to get
+app.post('/balance', async (req: Request, res: Response) => {
+  const { newBalance } = req.body; // Extract the new balance from the request body
+  console.log(newBalance); // Log the new balance to see the incoming data
+
+  if (typeof newBalance === 'number' && newBalance >= 0) { // Validate the balance
+    try {
+      // Update the balance in the database
+      await client.query('UPDATE balance SET balance = $1', [newBalance]);
+      res.status(200).json({ message: 'Balance updated successfully!' });
+    } catch (error) {
+      console.error('Error updating balance:', error);
+      res.status(500).json({ error: `Failed to update balance ${error}` });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid balance value!' });
+  }
+});
+
+app.get('/balance', async (req: Request, res: Response) => {
+  try {
+    const result = await client.query('SELECT balance FROM balance WHERE id = 1'); // Example query
+    const balance = result.rows[0]?.balance || 0; // Get the balance or default to 0
+    res.status(200).json({ balance });
+  } catch (error) {
+    console.error('Error retrieving balance:', error);
+    res.status(500).json({ error: 'Failed to retrieve balance' });
+  }
 });
