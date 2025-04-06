@@ -19,3 +19,87 @@
     justify-content: center;
     max-width: 572px;
 }
+
+.history-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px auto; /* Center the container and add vertical spacing */
+  padding: 20px; /* Add padding inside the container */
+  max-width: 1200px; /* Limit the width of the container */
+}
+
+.content-wrapper {
+  display: flex; 
+  flex-direction: column; /* Display chart and list side by side */
+  justify-content: space-between; /* Add space between the chart and the list */
+  align-items: flex-start; /* Align items at the top */
+  /*width: 100%;*/
+  gap: 20px; /* Add spacing between the chart and the list */
+}
+
+.stock-chart {
+  min-width: 100%; /* Ensure the chart has a minimum width */
+  display: flex; /* Use flexbox to center the chart */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  margin: 0 auto; /* Center the container itself */
+  width: 100%; /* Ensure it takes up the full width of its container */
+  height: 100%; /* Ensure it takes up the full height of its container */
+}
+
+.quiz-history {
+  width: 100%; /* Make the quiz list container take up the full width */
+  margin: 0; /* Remove any left margin */
+  padding: 10px; /* Add padding for spacing */
+  box-sizing: border-box; /* Include padding in the element's dimensions */
+  border-radius: 5px; /* Optional: Add rounded corners */
+}
+
+.history-container ol {
+  list-style: decimal; /* Ensure numbering is visible */
+  padding-left: 20px; /* Add padding to align the numbers */
+  margin: 0; /* Optional: Adjust margin if needed */
+  color: white; /* Make the numbers white */
+}
+
+.quiz-list {
+  width: 100%; /* Make the list itself take up the full width */
+  list-style-type: none; /* Remove default list styling */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+.quiz-item {
+  margin-bottom: 20px; /* Add spacing between each list item */
+  padding: 15px; /* Add padding inside each list item */
+  border: 1px solid #ddd; /* Add a border for better visibility */
+  border-radius: 5px; /* Add rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.quiz-item:hover {
+  background-color: #f0f0f0; /* Change background color on hover */
+  color: #007bff; /* Optional: Change text color on hover */
+  cursor: pointer; /* Change cursor to pointer to indicate interactivity */
+}
+
+.quiz-row {
+  display: flex; /* Align elements in a single row */
+  justify-content: space-between; /* Add space between elements */
+  align-items: center; /* Align items vertically */
+  gap: 10px; /* Add spacing between elements */
+  flex-wrap: wrap; /* Allow wrapping if the screen is too small */
+}
+
+.quiz-row span {
+  margin-right: 10px; /* Add spacing between spans */
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.separator {
+  border: none; /* Remove default border */
+  border-top: 2px solid #ddd; /* Add a solid line */
+  margin: 20px 0; /* Add spacing above and below the line */
+  width: 100%; /* Ensure the line spans the full width */
+}
