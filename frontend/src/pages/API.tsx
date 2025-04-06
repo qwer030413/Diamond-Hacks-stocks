@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: "" });
+const ai = new GoogleGenAI({ apiKey: "AIzaSyBaH4rns3_6ue8vfEd_lrZpy-hOK4QH-C0" });
 
 export default function API() {
   return (
@@ -44,12 +44,24 @@ Do not add any additional explanation or formatting outside of the 10 question b
   const pattern = /Question:\s*(.*?)\s*Choice 1:\s*(.*?)\s*Choice 2:\s*(.*?)\s*Answer:\s*(Choice 1|Choice 2)/gs;
 
   // Extract matched questions and map them into an array of objects
-  const questionsArray = Array.from(text.matchAll(pattern)).map(match => ({
-    question: match[1].trim(),
-    choice1: match[2].trim(),
-    choice2: match[3].trim(),
-    answer: match[4].trim()
-  }));
+  const questionsArray = Array.from(text.matchAll(pattern)).map(match => {
+    const choice1 = match[2].trim();
+    const choice2 = match[3].trim();
+  
+    // Extract percentages from choice1 and choice2
+    const percentagePattern = /(-?\d+)%/;
+    const choice1Percentage = choice1.match(percentagePattern)?.[1] ?? null;
+    const choice2Percentage = choice2.match(percentagePattern)?.[1] ?? null;
+  
+    return {
+      question: match[1].trim(),
+      choice1,
+      choice2,
+      answer: match[4].trim(),
+      choice1Percentage: choice1Percentage ? parseInt(choice1Percentage, 10) : null,
+      choice2Percentage: choice2Percentage ? parseInt(choice2Percentage, 10) : null,
+    };
+  });
 
   console.log("Parsed questions:", questionsArray);
 
@@ -57,6 +69,8 @@ Do not add any additional explanation or formatting outside of the 10 question b
   const userChoice = "Choice 1"; // For example, this can be dynamically set by user
   const explanation = "I think the stock will go up because it mentions that it will go down.";
   // Explanation request
+
+
   const explanationResponse = await ai.models.generateContent({
     model: "gemini-2.0-flash",
     contents: [
@@ -78,7 +92,7 @@ Do not add any additional explanation or formatting outside of the 10 question b
 
 // Call the function with a dynamic stock name (e.g., Apple)
 gemini_questions("Apple", 10);
-gemini_questions("Tesla", 3);
-gemini_questions("Google", 6);
+// gemini_questions("Tesla", 3);
+// gemini_questions("Google", 6);
 
 // use gemini to print the reasoning 
