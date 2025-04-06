@@ -40,43 +40,41 @@ export default function QuizForm(props: any) {
     return(
         <form className='formContainer' onSubmit={handleSubmit} autoComplete="off">
             <div className="section">
-                <label>choices:</label>
-                <div>
+                <label className="title1">Choices:</label>
                     <input type="radio" id="yes1" name="likeQuiz" value="Choice 1" onChange={e => setAnswer(e.target.value)} required/>
-                    <label htmlFor="yes1">choice 1: {props.quiz.choice1}</label>
+                    <label htmlFor="yes1"> {props.quiz.choice1}</label>
                     <input type="radio" id="no1" name="likeQuiz" value="Choice 2" onChange={e => setAnswer(e.target.value)} required/>
-                    <label htmlFor="no1">choice 2: {props.quiz.choice2}</label>
-                </div>
+                    <label htmlFor="no1">{props.quiz.choice2}</label> 
             </div>
             <div className="section">
-                <label>would you invest?</label>
-                <div>
+                <label className="title1">Would you invest?</label>
                     <input type="radio" id="yes2" name="recommendQuiz" value="yes" onChange={e => setInvestChoice(e.target.value)} required/>
                     <label htmlFor="yes2">Yes</label>
                     <input type="radio" id="no2" name="recommendQuiz" value="no" onChange={e => setInvestChoice(e.target.value)} required/>
                     <label htmlFor="no2">No</label>
-                </div>
             </div>
             <div className="section">
-                <label htmlFor="amount">How much would you invest, Enter an amount:</label>
+                <label htmlFor="amount" className="title1">How much would you invest, Enter an amount:</label>
                 <input type="number" id="amount" name="amount" onChange={e => setInvestment(e.target.value)}/>
             </div>
 
             <div className='section'>
-                <label htmlFor="feedback">Your reasoning:</label>
+                <label htmlFor="feedback" className="title1">Your reasoning:</label>
                 <textarea id="feedback" name="feedback" rows={4} cols={50}onChange={e => setReasoning(e.target.value)}required></textarea>
             </div>
-            {submitted? (
+            <div style={{paddingTop: 20}}>
+                {submitted? (
                 <p>{props.answer}</p>
-            ):
-            ("")}
-            {submitted? (
-                <button onClick={() => handleNext()}>Next</button>
-            ):
-            (
-                <button type="button" onClick={(e) => handleSubmit(e)}>Submit</button>
-            )}
-            <button onClick={() => navigate(`/`)}>Quit</button>
+                ):
+                ("")}
+                {submitted? (
+                    <button className="button" onClick={() => handleNext()}>Next</button>
+                ):
+                (
+                    <button className="button" type="button" onClick={(e) => handleSubmit(e)}>Submit</button>
+                )}
+                <button  className="button"onClick={() => navigate(`/`)}>Quit</button>
+            </div>    
         </form>
         
     );

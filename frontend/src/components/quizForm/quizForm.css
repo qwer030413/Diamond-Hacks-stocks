@@ -1,11 +1,198 @@
-.section{
+.section {
     display: flex;
+    flex-direction: column; /* Stack sections vertically */
+    gap: 1rem; /* Add spacing between sections */
+    margin-bottom: 20px; /* Add spacing between sections */
+    width: 100%; /* Ensure sections take up full width */
+}
+
+.section.choices {
+    display: flex;
+    flex-direction: row; /* Arrange radio buttons and labels in a row */
+    align-items: center; /* Align items vertically */
+    gap: 1rem; /* Add spacing between radio buttons and labels */
+    flex-wrap: wrap; /* Allow wrapping if the container is too narrow */
+}
+
+.section label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 10px; /* Add spacing below labels */
+    color: white; /* Match the theme */
+}
+
+.section input[type="radio"],
+.section input[type="number"],
+.section textarea {
+    margin-right: 10px; /* Add spacing between inputs */
+}
+
+input[type="number"],
+textarea {
+    width: 100%; /* Full width for inputs */
+    padding: 10px;
+    border: 1px solid white; /* White border */
+    border-radius: 5px; /* Rounded corners */
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: transparent; /* No background */
+    color: white; /* White text for better contrast */
+}
+
+textarea {
+    resize: none; /* Prevent resizing */
+}
+
+input[type="number"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: #007bff; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle glow */
+}
+
+input[type="radio"] {
+    display: none; /* Hide the default radio button */
+}
+
+.title1 {
+    font-weight: normal; /* Make the title bold */
+    color: #ffffff; /* White text color */
+    margin-bottom: 20px; /* Spacing below the title */
+    text-align: left; /* Keep the title left-aligned */
+    background: none; /* Ensure no background is applied */
+    border: none;
+    box-shadow: none; /* Remove any shadow effects */
+    pointer-events: none; /* Disable hover and click interactions */
+}
+
+.section {
+    display: flex;
+    justify-content: flex-start;
     flex-direction: row;
+    align-items: center; /* Center vertically */
+    width: 100%; /* Ensure it takes the full width of the container */
+    padding-top: 20px;
+    margin: 0;
     gap: 2rem;
 }
-.formContainer{
-    margin-top: 30px;
+
+label {
+    position: relative;
+    cursor: pointer;
+    display: flex; /* Align items in a row */
+    align-items: center;
+    gap: 0.8em; /* Space between the circle and text */
+    border-color: white;
+    border: 1px solid #ccc; /* Default border color */
+    padding: 1em 2em; /* Padding inside the label */
+    border-radius: 0.5em; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+label:hover {
+    background-color: #e0f0ff; /* Light blue background on hover */
+    color: #4189e0; /* Blue text color */
+}
+
+input[type="radio"]:checked + label {
+    background-color: #4189e0; /* Blue background for the label */
+    color: #ffffff; /* White text color */
+}
+
+input[type="radio"]:checked + label:before {
+    height: 1em;
+    width: 1em;
+    border: 0.65em solid #ffffff; /* White inner circle */
+    background-color: #4189e0; /* Blue background */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 20px;
+    color: white;
+    background-color: #007bff; /* .button color */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+    margin: 10px; /* Add spacing between .buttons */
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.button:active {
+    transform: scale(0.95); /* Slightly shrink on click */
+}
+
+.button.quit {
+    background-color: #dc3545; /* Red for quit .button */
+}
+
+.button.quit:hover {
+    background-color: #a71d2a; /* Darker red on hover */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    flex-direction: row;
+    gap: 20px; /* Add spacing between the buttons */
+    margin-top: 20px; /* Add spacing above the buttons */
+}
+
+p {
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    margin: 10px 0; /* Add spacing above and below the paragraph */
+}
+
+.quiz {
     display: flex;
     flex-direction: column;
-    gap:2rem;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0 auto; /* Center the quiz container */
+    max-width: 600px; /* Set a maximum width for the container */
+    min-width: 1000px; /* Ensure it takes up the full width of the parent */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    border-radius: 10px; /* Rounded corners */
+    color: white; /* Text color for better contrast */
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px; /* Rounded corners */
+    width: 100%; /* Set the container to take up the full width of its parent */
+    max-width: 800px; /* Increase the maximum width to make it longer */
+    color: white; /* Text color for better contrast */
+    margin-top: 20px; /* Add spacing between the quiz image and form */
+}
+
+form.formContainer {
+    width: 100%; /* Ensure the form takes up the full width of the parent container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: none; /* Remove the drop shadow */
+    color: white; /* Text color for better contrast */
+    margin: 0;
+}
+
+.quiz-img {
+    width: 100%; /* Make the image span the full width of the container */
+    height: 200px; /* Set a fixed height for the banner */
+    object-fit: cover; /* Ensure the image scales properly without distortion */
+    border-radius: 10px 10px 0 0; /* Round the top corners to match the container */
+    background-color: #878787; /* Match the background color */
 }
